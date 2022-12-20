@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'components/bottomNavBar.dart';
 import 'utils/themes.dart';
 import 'views/onBoarding.dart';
 import 'views/vuDeTestDeThemes.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Mobile money app-INF3075',
-      home: const VuDeTestDeThemes(),
+      home: const BottomNavBar(),
       darkTheme: darkTheme(),
       themeMode: ThemeMode.light,
       theme: lightTheme(),
