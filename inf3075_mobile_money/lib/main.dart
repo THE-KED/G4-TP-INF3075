@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'utils/themes.dart';
-import 'views/onBoarding.dart';
-import 'views/vuDeTestDeThemes.dart';
+import 'components/bottomNavBar.dart';
 
 void main() async {
   SystemChrome.setPreferredOrientations([
@@ -32,7 +31,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Mobile money app-INF3075',
-      home: const VuDeTestDeThemes(),
+      home: const BottomNavBar(
+        select: 2,
+      ),
       darkTheme: darkTheme(),
       themeMode: ThemeMode.light,
       theme: lightTheme(),
