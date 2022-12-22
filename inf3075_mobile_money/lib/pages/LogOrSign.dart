@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'EventPage.dart';
-import 'HomePage.dart';
 
 // ignore: must_be_immutable
-class Projet extends StatelessWidget {
+class LogOrSign extends StatelessWidget {
   Projet({
     Key? key,
   }) : super(key: key);
-
-  String info = "dak";
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +44,7 @@ class Projet extends StatelessWidget {
                 fixedSize: const MaterialStatePropertyAll(Size(320, 100)),
                 shape: MaterialStatePropertyAll(
                   RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(13),
                   ),
                 ),
                 elevation: MaterialStateProperty.all(15),
@@ -59,7 +55,7 @@ class Projet extends StatelessWidget {
                 Navigator.push(
                     context,
                     PageRouteBuilder(
-                      pageBuilder: (_, __, ___) => HomePage(),
+                      pageBuilder: (_, __, ___) => ...(),//entrer la fonction voulue
                     ));
               },
               child: const Text(
@@ -87,7 +83,7 @@ class Projet extends StatelessWidget {
                 fixedSize: const MaterialStatePropertyAll(Size(320, 100)),
                 shape: MaterialStatePropertyAll(
                   RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(13),
                   ),
                 ),
                 elevation: MaterialStateProperty.all(15),
@@ -98,7 +94,7 @@ class Projet extends StatelessWidget {
                 Navigator.push(
                     context,
                     PageRouteBuilder(
-                      pageBuilder: (_, __, ___) => const EventPage(),
+                      pageBuilder: (_, __, ___) => const ...(),//entrer la fonction voulue
                     ));
               },
               child: const Text(
