@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class LogOrSign extends StatelessWidget {
-  Projet({
+  LogOrSign({
     Key? key,
   }) : super(key: key);
 
