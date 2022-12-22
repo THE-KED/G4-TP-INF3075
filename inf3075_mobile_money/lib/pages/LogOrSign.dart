@@ -55,7 +55,7 @@ class LogOrSign extends StatelessWidget {
                 Navigator.push(
                     context,
                     PageRouteBuilder(
-                      pageBuilder: (_, __, ___) => ...(),//entrer la fonction voulue
+                      pageBuilder: (_, __, ___) => ...(),//entrer la fonction voulue ou au cas contraire remplacez tout le contenu de onPressed par null
                     ));
               },
               child: const Text(
@@ -94,7 +94,7 @@ class LogOrSign extends StatelessWidget {
                 Navigator.push(
                     context,
                     PageRouteBuilder(
-                      pageBuilder: (_, __, ___) => const ...(),//entrer la fonction voulue
+                      pageBuilder: (_, __, ___) => const ...(),//entrer la fonction voulue ou au cas contraire remplacez tout le contenu de onPressed par null
                     ));
               },
               child: const Text(
