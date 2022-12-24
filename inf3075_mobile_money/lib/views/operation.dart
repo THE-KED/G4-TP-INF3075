@@ -10,10 +10,24 @@ class Operation extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Operation page"),
       ),
-      body: Builder(
-        builder: (context) => const Text("Operation HERE"),
-      ),
+      body: const Text("Operation HERE"),
       bottomNavigationBar: const BottomNavBar(select: 0),
+    );
+  }
+}
+
+class TransactionViews extends StatefulWidget {
+  const TransactionViews({super.key});
+
+  @override
+  State<TransactionViews> createState() => _TransactionViewsState();
+}
+    
+class _TransactionViewsState extends State<TransactionViews> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: const Text('TRANSACTION VIEW,'),
     );
   }
 }

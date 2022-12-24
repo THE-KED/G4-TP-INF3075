@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:inf3075_mobile_money/views/fingerPrintAuth.dart';
+//import 'package:flutter/services.dart';
 
 import 'utils/themes.dart';
-import 'components/bottomNavBar.dart';
+import 'views/home.dart';
 
 void main() async {
-  SystemChrome.setPreferredOrientations([
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-    ),
-  );
-
   runApp(const MyApp());
 }
 
@@ -31,9 +28,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Mobile money app-INF3075',
-      home: const BottomNavBar(
-        select: 2,
-      ),
+      home: const FingerPrintAuth(),
       darkTheme: darkTheme(),
       themeMode: ThemeMode.light,
       theme: lightTheme(),
