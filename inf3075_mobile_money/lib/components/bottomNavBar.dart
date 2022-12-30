@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inf3075_mobile_money/utils/themes.dart';
 import 'package:inf3075_mobile_money/views/historique.dart';
 import 'package:inf3075_mobile_money/views/home.dart';
 import 'package:inf3075_mobile_money/views/operation.dart';
@@ -158,6 +159,7 @@ class IconButtonBar extends StatelessWidget {
                     height: 50,
                     width: 50,
                     child: FloatingActionButton(
+                      backgroundColor: PRIMARY_COLOR,
                       onPressed: onPressed,
                       child: IconButton(
                         onPressed: onPressed,
@@ -173,7 +175,7 @@ class IconButtonBar extends StatelessWidget {
                   Text(
                     text,
                     style: const TextStyle(
-                      color: Colors.blue,
+                      color: PRIMARY_COLOR,
                     ),
                   ),
                 ],
