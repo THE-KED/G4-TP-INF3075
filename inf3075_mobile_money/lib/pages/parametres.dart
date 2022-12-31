@@ -3,8 +3,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
-class Liste extends StatelessWidget {
-  const Liste({
+class Parametres extends StatelessWidget {
+  const Parametres({
     Key? key,
   }) : super(key: key);
 
