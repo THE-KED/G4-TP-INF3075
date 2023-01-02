@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:inf3075_mobile_money/API/localAuth_API.dart';
 import 'package:inf3075_mobile_money/utils/themes.dart';
-import 'package:inf3075_mobile_money/views/home.dart';
+import 'package:inf3075_mobile_money/views/homePage.dart';
+import 'package:inf3075_mobile_money/views/onBoarding.dart';
 
 class FingerPrintAuth extends StatefulWidget {
   const FingerPrintAuth({super.key});
@@ -204,7 +205,7 @@ class _FingerPrintAuthState extends State<FingerPrintAuth> {
                                     isAuthenticated) {
                                   Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
-                                      builder: (context) => const Home(),
+                                      builder: (context) => const Onboarding(),
                                     ),
                                   );
                                   setState(() {

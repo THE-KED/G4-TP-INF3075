@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:inf3075_mobile_money/utils/themes.dart';
+import 'package:inf3075_mobile_money/views/History.dart';
+import 'package:inf3075_mobile_money/views/reportbug.dart';
 
 import '../components/bottomNavBar.dart';
-import 'historique.dart';
-import 'operation.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -31,10 +31,17 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         shadowColor: Colors.grey,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const ReportBug(),
+                ),
+              );
+            },
             icon: const Icon(
               Icons.support_agent_sharp,
               size: 24,
@@ -197,7 +204,6 @@ class _HomeState extends State<Home> {
                                                 withdrawalAmountController
                                                     .text);
                                       });
-                                      
                                     }
                                   },
                                   child: const Text(
@@ -213,8 +219,8 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                         ),
-                        Center(
-                          child: HistoryView(),
+                        const Center(
+                          child: HistoryPage(),
                         )
                       ],
                     ),

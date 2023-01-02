@@ -4,7 +4,7 @@ import 'package:inf3075_mobile_money/views/fingerPrintAuth.dart';
 //import 'package:flutter/services.dart';
 
 import 'utils/themes.dart';
-import 'views/home.dart';
+import 'views/homePage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

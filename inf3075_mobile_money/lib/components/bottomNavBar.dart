@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:inf3075_mobile_money/utils/themes.dart';
-import 'package:inf3075_mobile_money/views/historique.dart';
-import 'package:inf3075_mobile_money/views/home.dart';
+import 'package:inf3075_mobile_money/views/ProfileScreen.dart';
+
+import 'package:inf3075_mobile_money/views/history.dart';
+import 'package:inf3075_mobile_money/views/homePage.dart';
 import 'package:inf3075_mobile_money/views/operation.dart';
-import 'package:inf3075_mobile_money/views/profile.dart';
+
 import 'package:inf3075_mobile_money/views/settings.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -18,9 +20,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
   int _selectedIndex = 0;
   final screens = const [
     Operation(),
-    Historique(),
+    HistoryPage(),
     Home(),
-    Profile(),
+    ProfileScreen(),
     Settings(),
   ];
 
@@ -41,6 +43,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           child: Stack(
             children: [
               Row(
+                
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   IconButtonBar(
