@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:inf3075_mobile_money/utils/themes.dart';
+
+import '../components/bottomNavBar.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -25,12 +28,15 @@ class ProfileScreen extends StatelessWidget {
             title: Text('Editer les informations'),
             content: SingleChildScrollView(
               child: Column(
-                children: <Widget>[
+                children: const [
                   TextField(
+                    maxLength: 255,
                     decoration: InputDecoration(
                         hintText: 'write a name', labelText: 'Name'),
                   ),
                   TextField(
+                    keyboardType: TextInputType.number,
+                    maxLength: 5,
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: 'write a password',
@@ -52,11 +58,11 @@ class ProfileScreen extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                Color.fromARGB(4, 9, 35, 1),
-                Color.fromRGBO(39, 105, 171, 1),
+                Color.fromARGB(155, 255, 255, 255),
+                PRIMARY_COLOR,
               ],
               begin: FractionalOffset.bottomCenter,
               end: FractionalOffset.topCenter,
@@ -64,28 +70,16 @@ class ProfileScreen extends StatelessWidget {
           ),
         ),
         Scaffold(
+          bottomNavigationBar: const BottomNavBar(select: 3),
           backgroundColor: Colors.transparent,
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 38),
               child: Column(children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Icon(
-                      AntDesign.arrowleft,
-                      color: Colors.white,
-                    ),
-                    Icon(
-                      AntDesign.logout,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Text(
+                const Text(
                   'My\nProfile',
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -93,7 +87,7 @@ class ProfileScreen extends StatelessWidget {
                       fontSize: 30,
                       fontFamily: 'Nisebuschgardens'),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Container(
@@ -117,11 +111,11 @@ class ProfileScreen extends StatelessWidget {
                             ),
                             child: Column(
                               children: [
-                                SizedBox(
-                                  height: 70,
+                                const SizedBox(
+                                  height: 50,
                                 ),
-                                Text(
-                                  "Jhone Doe",
+                                const Text(
+                                  "John Doe",
                                   style: TextStyle(
                                     color: Color.fromRGBO(39, 105, 171, 1),
                                     fontFamily: 'Numito',
@@ -140,8 +134,8 @@ class ProfileScreen extends StatelessWidget {
                                               fontFamily: 'Numito',
                                               fontSize: 21),
                                         ),
-                                        Text(
-                                          "5FA",
+                                        const Text(
+                                          "UT2000",
                                           style: TextStyle(
                                               color: Color.fromRGBO(
                                                   39, 105, 171, 1),
@@ -171,7 +165,7 @@ class ProfileScreen extends StatelessWidget {
                                               fontFamily: 'Numito',
                                               fontSize: 21),
                                         ),
-                                        Text(
+                                        const Text(
                                           "500 XFA",
                                           style: TextStyle(
                                               color: Color.fromRGBO(
@@ -195,10 +189,10 @@ class ProfileScreen extends StatelessWidget {
                             child: Container(
                               //  width: innerWidth * 0.3,
 
-                              child: Image.asset(
-                                'assets/img_profile.png',
-                                width: innerWidth * 0.45,
-                                fit: BoxFit.fitWidth,
+                              child: const Icon(
+                                Icons.account_circle_rounded,
+                                size: 100,
+                                color: SECONDARY_COLOR,
                               ),
                             ),
                           ),
@@ -207,11 +201,11 @@ class ProfileScreen extends StatelessWidget {
                     );
                   }),
                 ),
-                SizedBox(
-                  height: 25,
+                const SizedBox(
+                  height: 15,
                 ),
                 Container(
-                  height: heigh * 0.5,
+                  height: heigh * 0.3,
                   width: width,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
@@ -221,18 +215,18 @@ class ProfileScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
-                          Text(
-                            "My orders",
+                          const Text(
+                            "My Credentials",
                             style: TextStyle(
                               color: Color.fromRGBO(39, 105, 171, 1),
                               fontSize: 25,
                               fontFamily: "Numito",
                             ),
                           ),
-                          Divider(),
+                          const Divider(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -245,7 +239,7 @@ class ProfileScreen extends StatelessWidget {
                                         fontFamily: 'Numito',
                                         fontSize: 21),
                                   ),
-                                  Text(
+                                  const Text(
                                     "Jhone Doe",
                                     style: TextStyle(
                                         color: Color.fromRGBO(39, 105, 171, 1),
@@ -256,7 +250,7 @@ class ProfileScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Row(
@@ -271,7 +265,7 @@ class ProfileScreen extends StatelessWidget {
                                         fontFamily: 'Numito',
                                         fontSize: 21),
                                   ),
-                                  Text(
+                                  const Text(
                                     "******",
                                     style: TextStyle(
                                         color: Color.fromRGBO(39, 105, 171, 1),
@@ -292,7 +286,7 @@ class ProfileScreen extends StatelessWidget {
             onPressed: () {
               _showFormDialogue(context);
             },
-            child: Icon(Icons.edit),
+            child: const Icon(Icons.edit),
           ),
         )
       ],

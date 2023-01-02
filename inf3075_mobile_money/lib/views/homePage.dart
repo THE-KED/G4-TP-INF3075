@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:inf3075_mobile_money/utils/themes.dart';
 import 'package:inf3075_mobile_money/views/History.dart';
+
 import 'package:inf3075_mobile_money/views/reportbug.dart';
 
 import '../components/bottomNavBar.dart';
+import '../components/history_model.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -26,6 +28,36 @@ class _HomeState extends State<Home> {
     withdrawalPasswordController.dispose();
     super.dispose();
   }
+
+  final List<HistoryModel> historyElement = [
+    HistoryModel(
+        sendersNumbers: "697624477",
+        message: "Le numéro xxxxxxxx vous a envoyez la somme de .....FCFA"),
+    HistoryModel(
+        sendersNumbers: "697624477",
+        message: "Le numéro xxxxxxxx vous a envoyez la somme de .....FCFA"),
+    HistoryModel(
+        sendersNumbers: "697624477",
+        message: "Le numéro xxxxxxxx vous a envoyez la somme de .....FCFA"),
+    HistoryModel(
+        sendersNumbers: "697624477",
+        message: "Le numéro xxxxxxxx vous a envoyez la somme de .....FCFA"),
+    HistoryModel(
+        sendersNumbers: "697624477",
+        message: "Le numéro xxxxxxxx vous a envoyez la somme de .....FCFA"),
+    HistoryModel(
+        sendersNumbers: "697624477",
+        message: "Le numéro xxxxxxxx vous a envoyez la somme de .....FCFA"),
+    HistoryModel(
+        sendersNumbers: "697624477",
+        message: "Le numéro xxxxxxxx vous a envoyez la somme de .....FCFA"),
+  ];
+  final styleText = const TextStyle(
+    fontSize: 20,
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -219,8 +251,11 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                         ),
-                        const Center(
-                          child: HistoryPage(),
+                        Center(
+                          child: HistoryMessages(
+                            historyElement: historyElement,
+                            styleText: styleText,
+                          ),
                         )
                       ],
                     ),
