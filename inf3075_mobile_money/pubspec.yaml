@@ -67,6 +67,10 @@ flutter:
   assets:
     - assets/onboard1.JPG
     - assets/finger1.png
+    - assets/help.png
+    - assets/langue2.png
+    - assets/phone.png
+    - assets/theme.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

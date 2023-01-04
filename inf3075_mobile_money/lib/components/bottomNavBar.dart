@@ -18,12 +18,12 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   int _selectedIndex = 0;
-  final screens = const [
-    Operation(),
-    HistoryPage(),
-    Home(),
+  final screens = [
+    const Operation(),
+    const HistoryPage(),
+    const Home(),
     ProfileScreen(),
-    Settings(),
+    const Settings(),
   ];
 
   @override
@@ -43,7 +43,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
           child: Stack(
             children: [
               Row(
-                
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   IconButtonBar(
@@ -159,7 +158,7 @@ class IconButtonBar extends StatelessWidget {
             ? Column(
                 children: [
                   SizedBox(
-                    height: 50,
+                    height: 48,
                     width: 50,
                     child: FloatingActionButton(
                       backgroundColor: PRIMARY_COLOR,

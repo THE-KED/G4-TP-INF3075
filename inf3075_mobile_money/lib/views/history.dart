@@ -73,6 +73,7 @@ class HistoryMessages extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       child: ListView.builder(
+        key: key,
         itemBuilder: (_, index) {
           return Card(
             child: Container(
@@ -80,32 +81,30 @@ class HistoryMessages extends StatelessWidget {
               decoration: const BoxDecoration(
                 color: Color.fromRGBO(194, 228, 233, 100),
               ),
-              child: Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const Icon(
-                          Icons.person,
-                          size: 40,
-                          color: Colors.deepPurpleAccent,
-                        ),
-                        Text(
-                          historyElement[index].sendersNumbers,
-                          style: styleText,
-                        ),
-                      ],
-                    ),
-                    Text(
-                      historyElement[index].message,
-                      style: styleText,
-                    ),
-                  ],
-                ),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Icon(
+                        Icons.person,
+                        size: 40,
+                        color: Colors.deepPurpleAccent,
+                      ),
+                      Text(
+                        historyElement[index].sendersNumbers,
+                        style: styleText,
+                      ),
+                    ],
+                  ),
+                  Text(
+                    historyElement[index].message,
+                    style: styleText,
+                  ),
+                ],
               ),
             ),
           );

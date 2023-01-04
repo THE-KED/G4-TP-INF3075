@@ -4,48 +4,79 @@ import 'package:inf3075_mobile_money/utils/themes.dart';
 
 import '../components/bottomNavBar.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  String name = "Johny Peter";
+
+  String ID = "UT300";
+
+  double money = 19200;
+
+  int password = 20200;
+
   _showFormDialogue(BuildContext context) {
     return showDialog(
         context: context,
         barrierDismissible: true,
         builder: (parem) {
           return AlertDialog(
-            actions: <Widget>[
-              TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.red,
-                ),
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Annuler'),
-              ),
-              TextButton(
-                onPressed: () async {},
-                child: Text("Save"),
-              ),
-            ],
-            title: Text('Editer les informations'),
             content: SingleChildScrollView(
               child: Column(
-                children: const [
+                children: [
                   TextField(
+                    style: const TextStyle(color: Colors.black),
+                    controller: nameController,
                     maxLength: 255,
                     decoration: InputDecoration(
-                        hintText: 'write a name', labelText: 'Name'),
+                      labelStyle: const TextStyle(color: Colors.black),
+                      hintText: name,
+                      labelText: 'Name',
+                    ),
                   ),
                   TextField(
+                    style: const TextStyle(color: Colors.black),
+                    controller: passwordController,
                     keyboardType: TextInputType.number,
                     maxLength: 5,
                     obscureText: true,
                     decoration: InputDecoration(
-                      hintText: 'write a password',
+                      labelStyle: const TextStyle(color: Colors.black),
+                      hintText: "$password",
                       labelText: 'password',
                     ),
                   ),
                 ],
               ),
             ),
+            actions: <Widget>[
+              TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.red,
+                ),
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    password = int.parse(passwordController.text);
+                    name = nameController.text;
+                  });
+                  Navigator.pop(context);
+                },
+                child: const Text("Save"),
+              ),
+            ],
+            title: const Text('Edit informations'),
           );
         });
   }
@@ -114,9 +145,9 @@ class ProfileScreen extends StatelessWidget {
                                 const SizedBox(
                                   height: 50,
                                 ),
-                                const Text(
-                                  "John Doe",
-                                  style: TextStyle(
+                                Text(
+                                  name,
+                                  style: const TextStyle(
                                     color: Color.fromRGBO(39, 105, 171, 1),
                                     fontFamily: 'Numito',
                                     fontSize: 32,
@@ -134,9 +165,9 @@ class ProfileScreen extends StatelessWidget {
                                               fontFamily: 'Numito',
                                               fontSize: 21),
                                         ),
-                                        const Text(
-                                          "UT2000",
-                                          style: TextStyle(
+                                        Text(
+                                          ID,
+                                          style: const TextStyle(
                                               color: Color.fromRGBO(
                                                   39, 105, 171, 1),
                                               fontFamily: 'Numito',
@@ -159,15 +190,15 @@ class ProfileScreen extends StatelessWidget {
                                     Column(
                                       children: [
                                         Text(
-                                          "Soldes",
+                                          "Current Money",
                                           style: TextStyle(
                                               color: Colors.grey[900],
                                               fontFamily: 'Numito',
                                               fontSize: 21),
                                         ),
-                                        const Text(
-                                          "500 XFA",
-                                          style: TextStyle(
+                                        Text(
+                                          "$money XFA",
+                                          style: const TextStyle(
                                               color: Color.fromRGBO(
                                                   39, 105, 171, 1),
                                               fontFamily: 'Numito',
@@ -239,9 +270,9 @@ class ProfileScreen extends StatelessWidget {
                                         fontFamily: 'Numito',
                                         fontSize: 21),
                                   ),
-                                  const Text(
-                                    "Jhone Doe",
-                                    style: TextStyle(
+                                  Text(
+                                    name,
+                                    style: const TextStyle(
                                         color: Color.fromRGBO(39, 105, 171, 1),
                                         fontFamily: 'Numito',
                                         fontSize: 21),
@@ -283,6 +314,7 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           floatingActionButton: FloatingActionButton(
+            heroTag: heigh,
             onPressed: () {
               _showFormDialogue(context);
             },
