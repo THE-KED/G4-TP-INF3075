@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:inf3075_mobile_money/services/auth_services/loginServices.dart';
 import 'package:inf3075_mobile_money/utils/themes.dart';
 import 'package:inf3075_mobile_money/views/homePage.dart';
 import 'package:inf3075_mobile_money/views/signup.dart';
@@ -124,6 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 child: TextButton(
                   onPressed: () {
+                   
                     if (int.parse(phoneController.text) == phone &&
                         int.parse(passwordController.text) == password) {
                       Navigator.pushAndRemoveUntil(
@@ -135,16 +137,17 @@ class _LoginPageState extends State<LoginPage> {
                       );
                     } else {
                       showModalBottomSheet(
-                          backgroundColor: Colors.red,
-                          barrierColor: Colors.transparent,
-                          context: context,
-                          builder: ((context) => const Text(
-                                'Sorry, wrong credentials',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                ),
-                              )));
+                        backgroundColor: Colors.red,
+                        barrierColor: Colors.transparent,
+                        context: context,
+                        builder: ((context) => const Text(
+                              'Sorry, wrong credentials',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                              ),
+                            )),
+                      );
                     }
                   },
                   child: const Center(

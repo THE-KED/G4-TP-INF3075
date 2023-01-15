@@ -40,6 +40,7 @@ dependencies:
   flutter_svg: ^1.1.6
   dotted_border: ^2.0.0+3
   flutter_vector_icons: ^2.0.0
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:
