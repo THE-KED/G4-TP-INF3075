@@ -62,7 +62,8 @@ class Account {
 
   fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    client = json['Client'];
+    client.name = json['nom'];
+    client.phoneNber = json['numero'];
     pin = json['Pin'];
     initialDate = json['InitialDate'];
     balance = json['Balance'];

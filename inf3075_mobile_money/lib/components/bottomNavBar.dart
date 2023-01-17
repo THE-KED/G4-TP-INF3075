@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import 'package:inf3075_mobile_money/models/account.dart';
 import 'package:inf3075_mobile_money/utils/themes.dart';
 import 'package:inf3075_mobile_money/views/ProfileScreen.dart';
 
@@ -8,22 +13,61 @@ import 'package:inf3075_mobile_money/views/operation.dart';
 
 import 'package:inf3075_mobile_money/views/settings.dart';
 
+import '../models/client.dart';
+
 class BottomNavBar extends StatefulWidget {
   final int select;
-  const BottomNavBar({super.key, required this.select});
+  Account user;
+
+  BottomNavBar({super.key, required this.select, required this.user});
 
   @override
-  State<BottomNavBar> createState() => _BottomNavBarState();
+  State<StatefulWidget> createState() {
+    return BottomNavBarState(user);
+  }
 }
 
-class _BottomNavBarState extends State<BottomNavBar> {
+class BottomNavBarState extends State<BottomNavBar> {
+  Account user;
+  BottomNavBarState(this.user);
+
+  fetchData() async {
+    var response = await http.get(
+      Uri.parse(
+          "http://192.168.12.169:8080/Account/num?num=${user.client.phoneNber}&"),
+    );
+
+    if (response.statusCode == 400 || response.statusCode == 200) {
+      Map<String, dynamic> responseData = json.decode(response.body);
+
+      user.client = Client(
+        name: responseData["nom"],
+        phoneNber: responseData["numero"],
+      );
+      user.id = responseData["id"];
+      user.balance = responseData["balance"];
+      user.pin = responseData["pin"];
+      user.initialDate = "${responseData["intialDate"]}";
+    }
+  }
+
   int _selectedIndex = 0;
-  final screens = [
-    const Operation(),
-    const HistoryPage(),
-    const Home(),
-    ProfileScreen(),
-    const Settings(),
+  late final screens = [
+    Operation(
+      myAcc: user,
+    ),
+    HistoryPage(
+      myAcc: user,
+    ),
+    Home(
+      myAcc: user,
+    ),
+    ProfileScreen(
+      myAcc: user,
+    ),
+    Settings(
+      myAcc: user,
+    ),
   ];
 
   @override
@@ -50,6 +94,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     selected: _selectedIndex == 0,
                     text: "transactions",
                     onPressed: () {
+                      fetchData();
                       setState(() {
                         _selectedIndex = 0;
                       });
@@ -66,6 +111,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     selected: _selectedIndex == 1,
                     text: "history",
                     onPressed: () {
+                      fetchData();
                       setState(() {
                         _selectedIndex = 1;
                       });
@@ -82,6 +128,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     selected: _selectedIndex == 2,
                     text: "home",
                     onPressed: () {
+                      fetchData();
                       setState(() {
                         _selectedIndex = 2;
                       });
@@ -98,6 +145,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     selected: _selectedIndex == 3,
                     text: "profile",
                     onPressed: () {
+                      fetchData();
                       setState(() {
                         _selectedIndex = 3;
                       });
@@ -114,6 +162,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     selected: _selectedIndex == 4,
                     text: "settings",
                     onPressed: () {
+                      fetchData();
                       setState(() {
                         _selectedIndex = 4;
                       });

@@ -36,9 +36,6 @@ class _SignupPageState extends State<SignupPage> {
     super.dispose();
   }
 
-  int phone = 670754483;
-  int password = 20200;
-
   //connexion to the backend
 
   Account? myAccount;
@@ -49,11 +46,8 @@ class _SignupPageState extends State<SignupPage> {
         phoneController.text.isNotEmpty &&
         nameController.text.isNotEmpty &&
         confirmPasswordController.text.isNotEmpty) {
-      log("hi");
-      debugPrint("Debuging here");
-      log("fhi");
       var response = await http.post(
-          Uri.parse("http://192.168.125.169:8080/Account/save"),
+          Uri.parse("http://192.168.12.169:8080/Account/save"),
           body: jsonEncode(
             {
               "idClient": "",
@@ -68,14 +62,24 @@ class _SignupPageState extends State<SignupPage> {
             "Accept": "application/json",
             "content-type": "application/json"
           });
-      log("hi2");
-      debugPrint(response.body);
+      var body = json.decode(response.body);
+
+      debugPrint("element 0 -- ${body["id"]}");
+      debugPrint("element 2 -- ${body["nom"]}");
       if (response.statusCode == 200 || response.statusCode == 400) {
         // ignore: use_build_context_synchronously
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => const Home(),
+            builder: (context) => Home(
+              myAcc: Account(
+                id: body["id"],
+                client: Client(name: body["nom"], phoneNber: body["numero"]),
+                pin: body["pin"],
+                balance: body["balance"],
+                initialDate: body["initialDate"],
+              ),
+            ),
           ),
           (Route<dynamic> route) => false,
         );
@@ -83,7 +87,10 @@ class _SignupPageState extends State<SignupPage> {
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            backgroundColor: Colors.red.withOpacity(0.4),
+            behavior: SnackBarBehavior.floating,
+            margin:
+                EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.94),
+            backgroundColor: Colors.red.withOpacity(0.9),
             duration: const Duration(seconds: 3),
             content: const Center(
               child: Text(
@@ -100,7 +107,10 @@ class _SignupPageState extends State<SignupPage> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: Colors.red.withOpacity(0.4),
+          behavior: SnackBarBehavior.floating,
+          margin:
+              EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.94),
+          backgroundColor: Colors.red.withOpacity(0.9),
           elevation: 2,
           duration: const Duration(seconds: 3),
           content: const Center(
@@ -108,7 +118,8 @@ class _SignupPageState extends State<SignupPage> {
               "Sorry, Empty fields not permitted",
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 16,
+                fontSize: 17,
+                fontWeight: FontWeight.w900,
               ),
             ),
           ),
@@ -218,7 +229,9 @@ class _SignupPageState extends State<SignupPage> {
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(
+              height: 20,
+            ),
 
             //password textfeild
             Padding(
@@ -231,7 +244,9 @@ class _SignupPageState extends State<SignupPage> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(
+                    10.0,
+                  ),
                   child: TextField(
                     maxLength: 5,
                     keyboardType: TextInputType.number,

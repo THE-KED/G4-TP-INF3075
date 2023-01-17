@@ -1,10 +1,15 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:inf3075_mobile_money/models/account.dart';
+import 'package:inf3075_mobile_money/models/client.dart';
 import 'package:inf3075_mobile_money/services/auth_services/loginServices.dart';
 import 'package:inf3075_mobile_money/utils/themes.dart';
 import 'package:inf3075_mobile_money/views/homePage.dart';
 import 'package:inf3075_mobile_money/views/signup.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -124,43 +129,149 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: TextButton(
-                  onPressed: () {
-                   
-                    if (int.parse(phoneController.text) == phone &&
-                        int.parse(passwordController.text) == password) {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Home(),
-                        ),
-                        (Route<dynamic> route) => false,
+                    onPressed: () async {
+                      Account user = Account(
+                        client: Client(name: "", phoneNber: ""),
+                        pin: "",
+                        balance: 0.0,
+                        initialDate: "${DateTime.now()}",
                       );
-                    } else {
-                      showModalBottomSheet(
-                        backgroundColor: Colors.red,
-                        barrierColor: Colors.transparent,
-                        context: context,
-                        builder: ((context) => const Text(
-                              'Sorry, wrong credentials',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
+                      if (phoneController.text.isNotEmpty &&
+                          passwordController.text.isNotEmpty) {
+                        //check if num exists
+
+                        var responseCheck = await http.get(
+                          Uri.parse(
+                              "http://192.168.12.169:8080/Account/checknum?num=${phoneController.text}&"),
+                        );
+                        var bodyCheckNum = json.decode(responseCheck.body);
+                        debugPrint(bodyCheckNum.toString());
+                        if (bodyCheckNum.toString() == "true") {
+                          var response = await http.get(
+                            Uri.parse(
+                                "http://192.168.12.169:8080/Account/num?num=${phoneController.text}&"),
+                          );
+
+                          if (response.statusCode == 400 ||
+                              response.statusCode == 200) {
+                            Map<String, dynamic> responseData =
+                                json.decode(response.body);
+
+                            user.client = Client(
+                              name: responseData["nom"],
+                              phoneNber: responseData["numero"],
+                            );
+                            user.id = responseData["id"];
+                            user.balance = responseData["balance"];
+                            user.pin = responseData["pin"];
+                            user.initialDate = "${responseData["intialDate"]}";
+
+                            debugPrint("${response.statusCode}");
+                            if (user.pin == passwordController.text) {
+                              // ignore: use_build_context_synchronously
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Home(
+                                    myAcc: user,
+                                  ),
+                                ),
+                                (Route<dynamic> route) => false,
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  behavior: SnackBarBehavior.floating,
+                                  margin: EdgeInsets.only(
+                                      top: MediaQuery.of(context).size.height *
+                                          0.94),
+                                  backgroundColor: Colors.red.withOpacity(0.85),
+                                  duration: const Duration(seconds: 3),
+                                  content: Center(
+                                    child: Text(
+                                      "Sorry, Wrong password for: ${phoneController.text}",
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                margin: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.height *
+                                        0.94),
+                                backgroundColor: Colors.red.withOpacity(0.9),
+                                duration: const Duration(seconds: 3),
+                                content: const Center(
+                                  child: Text(
+                                    "Sorry, Something went wrong",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            )),
-                      );
-                    }
-                  },
-                  child: const Center(
-                    child: Text(
-                      'Login',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
+                            );
+                          }
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              behavior: SnackBarBehavior.floating,
+                              margin: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height *
+                                      0.94),
+                              backgroundColor: Colors.red.withOpacity(0.9),
+                              duration: const Duration(seconds: 3),
+                              content: const Center(
+                                child: Text(
+                                  "Sorry, Number does not exist",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            behavior: SnackBarBehavior.floating,
+                            margin: EdgeInsets.only(
+                                top: MediaQuery.of(context).size.height * 0.94),
+                            backgroundColor: Colors.red.withOpacity(0.9),
+                            duration: const Duration(seconds: 3),
+                            content: const Center(
+                              child: Text(
+                                "Sorry, there should be no empty fields",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    child: const Center(
+                      child: Text(
+                        'Login',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                        ),
                       ),
-                    ),
-                  ),
-                ),
+                    )),
               ),
             ),
 

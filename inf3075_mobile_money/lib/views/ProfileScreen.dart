@@ -1,27 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:inf3075_mobile_money/models/account.dart';
 import 'package:inf3075_mobile_money/utils/themes.dart';
 
 import '../components/bottomNavBar.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  Account myAcc;
+  ProfileScreen({super.key, required this.myAcc});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<StatefulWidget> createState() => _ProfileScreenState(myAcc);
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  Account myAcc;
+  _ProfileScreenState(this.myAcc);
+
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
-  String name = "Johny Peter";
-
-  String ID = "UT300";
-
-  double money = 19200;
-
-  int password = 20200;
 
   _showFormDialogue(BuildContext context) {
     return showDialog(
@@ -34,23 +31,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   TextField(
                     style: const TextStyle(color: Colors.black),
-                    controller: nameController,
                     maxLength: 255,
                     decoration: InputDecoration(
                       labelStyle: const TextStyle(color: Colors.black),
-                      hintText: name,
+                      hintText: myAcc.client.name,
                       labelText: 'Name',
                     ),
                   ),
                   TextField(
                     style: const TextStyle(color: Colors.black),
-                    controller: passwordController,
                     keyboardType: TextInputType.number,
                     maxLength: 5,
                     obscureText: true,
                     decoration: InputDecoration(
                       labelStyle: const TextStyle(color: Colors.black),
-                      hintText: "$password",
+                      hintText: myAcc.pin,
                       labelText: 'password',
                     ),
                   ),
@@ -67,10 +62,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               TextButton(
                 onPressed: () {
-                  setState(() {
-                    password = int.parse(passwordController.text);
-                    name = nameController.text;
-                  });
                   Navigator.pop(context);
                 },
                 child: const Text("Save"),
@@ -101,7 +92,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
         Scaffold(
-          bottomNavigationBar: const BottomNavBar(select: 3),
+          bottomNavigationBar: BottomNavBar(
+            select: 3,
+            user: myAcc,
+          ),
           backgroundColor: Colors.transparent,
           body: SingleChildScrollView(
             child: Padding(
@@ -146,7 +140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   height: 50,
                                 ),
                                 Text(
-                                  name,
+                                  myAcc.client.name!,
                                   style: const TextStyle(
                                     color: Color.fromRGBO(39, 105, 171, 1),
                                     fontFamily: 'Numito',
@@ -166,7 +160,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               fontSize: 21),
                                         ),
                                         Text(
-                                          ID,
+                                          "YM-U${myAcc.getID}",
                                           style: const TextStyle(
                                               color: Color.fromRGBO(
                                                   39, 105, 171, 1),
@@ -197,7 +191,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               fontSize: 21),
                                         ),
                                         Text(
-                                          "$money XFA",
+                                          "${myAcc.balance} XFA",
                                           style: const TextStyle(
                                               color: Color.fromRGBO(
                                                   39, 105, 171, 1),
@@ -271,7 +265,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         fontSize: 21),
                                   ),
                                   Text(
-                                    name,
+                                    myAcc.client.name!,
                                     style: const TextStyle(
                                         color: Color.fromRGBO(39, 105, 171, 1),
                                         fontFamily: 'Numito',
@@ -314,7 +308,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           floatingActionButton: FloatingActionButton(
-            heroTag: heigh,
+            heroTag: "fg",
             onPressed: () {
               _showFormDialogue(context);
             },

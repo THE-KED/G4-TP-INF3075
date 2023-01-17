@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import 'package:inf3075_mobile_money/models/account.dart';
 import 'package:inf3075_mobile_money/utils/themes.dart';
-import 'package:inf3075_mobile_money/views/History.dart';
+import 'package:inf3075_mobile_money/views/history.dart';
 
 import 'package:inf3075_mobile_money/views/reportbug.dart';
 
@@ -8,19 +13,21 @@ import '../components/bottomNavBar.dart';
 import '../components/history_model.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  Account myAcc;
+  Home({super.key, required this.myAcc});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<StatefulWidget> createState() {
+    return _HomeState(myAcc);
+  }
 }
 
 class _HomeState extends State<Home> {
+  Account myAcc;
+  _HomeState(this.myAcc);
+
   TextEditingController withdrawalAmountController = TextEditingController();
   TextEditingController withdrawalPasswordController = TextEditingController();
-
-  String phone = "670754483";
-  double currentMoney = 19200;
-  int TruePassword = 20930;
 
   @override
   void dispose() {
@@ -86,7 +93,10 @@ class _HomeState extends State<Home> {
         elevation: 2,
         backgroundColor: PRIMARY_COLOR,
       ),
-      bottomNavigationBar: const BottomNavBar(select: 2),
+      bottomNavigationBar: BottomNavBar(
+        select: 2,
+        user: myAcc,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -118,7 +128,7 @@ class _HomeState extends State<Home> {
                       height: 10,
                     ),
                     Text(
-                      phone,
+                      myAcc.client.phoneNber!,
                       style: const TextStyle(
                         fontSize: 15,
                       ),
@@ -130,7 +140,7 @@ class _HomeState extends State<Home> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "XAF  $currentMoney",
+                          "XAF  ${myAcc.balance}",
                           style: const TextStyle(
                             fontSize: 27,
                             color: SECONDARY_COLOR,
@@ -226,16 +236,126 @@ class _HomeState extends State<Home> {
                                     ),
                                     backgroundColor: PRIMARY_COLOR,
                                   ),
-                                  onPressed: () {
-                                    if (int.parse(withdrawalPasswordController
-                                            .text) ==
-                                        TruePassword) {
-                                      setState(() {
-                                        currentMoney = currentMoney -
+                                  onPressed: () async {
+                                    debugPrint(myAcc.client.phoneNber);
+                                    if (myAcc.balance >
                                             double.parse(
                                                 withdrawalAmountController
-                                                    .text);
-                                      });
+                                                    .text) &&
+                                        myAcc.pin ==
+                                            withdrawalPasswordController.text) {
+                                      var response = await http.post(
+                                          Uri.parse(
+                                            "http://192.168.12.169:8080/Transaction/trans?num1=${myAcc.client.phoneNber}&balance=${-double.parse(withdrawalAmountController.text)}&num2=${myAcc.client.phoneNber}&Description&type=${true}",
+                                          ),
+                                          headers: {
+                                            "Accept": "application/json",
+                                            "content-type": "application/json"
+                                          });
+                                      var body = json.decode(response.body);
+                                      debugPrint(body.toString());
+                                      if (body.toString() == "false") {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            behavior: SnackBarBehavior.floating,
+                                            margin: EdgeInsets.only(
+                                                top: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.94),
+                                            backgroundColor:
+                                                Colors.red.withOpacity(0.9),
+                                            duration:
+                                                const Duration(seconds: 3),
+                                            content: const Center(
+                                              child: Text(
+                                                "Unable to complete, Sorry.",
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      } else if (body.toString() == "true" &&
+                                          withdrawalPasswordController.text ==
+                                              myAcc.pin) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            behavior: SnackBarBehavior.floating,
+                                            margin: EdgeInsets.only(
+                                                top: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.85),
+                                            backgroundColor:
+                                                Colors.green.withOpacity(0.9),
+                                            duration:
+                                                const Duration(seconds: 3),
+                                            content: Center(
+                                              child: Text(
+                                                "Withdrawal of ${withdrawalAmountController.text} completed successfully.",
+                                                style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            behavior: SnackBarBehavior.floating,
+                                            margin: EdgeInsets.only(
+                                                top: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.84),
+                                            backgroundColor:
+                                                Colors.yellow.withOpacity(0.9),
+                                            duration:
+                                                const Duration(seconds: 3),
+                                            content: const Center(
+                                              child: Text(
+                                                "Sorry, something went wrong. Check your network",
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          behavior: SnackBarBehavior.floating,
+                                          margin: EdgeInsets.only(
+                                              top: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.84),
+                                          backgroundColor:
+                                              Colors.red.withOpacity(0.9),
+                                          duration: const Duration(seconds: 3),
+                                          content: const Center(
+                                            child: Text(
+                                              "Sorry, passwords do not match, insufficient funds, or empty fields provided",
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
                                     }
                                   },
                                   child: const Text(
@@ -255,6 +375,7 @@ class _HomeState extends State<Home> {
                           child: HistoryMessages(
                             historyElement: historyElement,
                             styleText: styleText,
+                            user: myAcc,
                           ),
                         )
                       ],

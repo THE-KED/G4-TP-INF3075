@@ -1,16 +1,29 @@
+import 'dart:convert';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:inf3075_mobile_money/components/bottomNavBar.dart';
+import 'package:inf3075_mobile_money/models/account.dart';
 import 'package:inf3075_mobile_money/utils/themes.dart';
 
 class Operation extends StatefulWidget {
-  const Operation({super.key});
+  Account myAcc;
+  Operation({
+    super.key,
+    required this.myAcc,
+  });
 
   @override
-  State<Operation> createState() => _OperationState();
+  State<StatefulWidget> createState() => _OperationState(myAcc);
 }
 
 class _OperationState extends State<Operation> {
+  Account user;
+
+  _OperationState(this.user);
+
   TextEditingController depositNumberController = TextEditingController();
   TextEditingController depositAmountController = TextEditingController();
   TextEditingController depositPasswordController = TextEditingController();
@@ -40,8 +53,8 @@ class _OperationState extends State<Operation> {
           return Transform(
             transform: Matrix4.translationValues(0.0, curvedValue * 200, 0.0),
             child: AlertDialog(
-              shape:
-                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0)),
               title: Row(
                 children: [
                   const Text(
@@ -132,7 +145,114 @@ class _OperationState extends State<Operation> {
                         ),
                         backgroundColor: PRIMARY_COLOR,
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        var responseCheck = await http.get(
+                          Uri.parse(
+                              "http://192.168.12.169:8080/Account/checknum?num=${depositNumberController.text}&"),
+                        );
+                        var bodyCheckNum = json.decode(responseCheck.body);
+                        debugPrint(bodyCheckNum.toString());
+                        if (bodyCheckNum.toString() == "true") {
+                          var response = await http.post(
+                              Uri.parse(
+                                "http://192.168.12.169:8080/Transaction/trans?num1=${user.client.phoneNber}&balance=${double.parse(depositAmountController.text)}&num2=${depositNumberController.text}&Description&type=${true}",
+                              ),
+                              headers: {
+                                "Accept": "application/json",
+                                "content-type": "application/json"
+                              });
+                          var body = json.decode(response.body);
+                          debugPrint(body.toString());
+                          if (body.toString() == "false") {
+                            Navigator.of(context).pop();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                margin: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.height *
+                                        0.94),
+                                backgroundColor: Colors.red.withOpacity(0.9),
+                                duration: const Duration(seconds: 3),
+                                content: const Center(
+                                  child: Text(
+                                    "Unable to complete, check your account.",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else if (body.toString() == "true" &&
+                              depositPasswordController.text == user.pin &&
+                              user.client.phoneNber !=
+                                  depositNumberController.text) {
+                            Navigator.of(context).pop();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                margin: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.height *
+                                        0.6),
+                                backgroundColor: Colors.green.withOpacity(0.9),
+                                duration: const Duration(seconds: 6),
+                                content: Center(
+                                  child: Text(
+                                    "deposit of ${depositAmountController.text} to ${depositNumberController.text} completed successfully.",
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else {
+                            Navigator.of(context).pop();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                margin: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.height *
+                                        0.80),
+                                backgroundColor: Colors.red.withOpacity(0.9),
+                                duration: const Duration(seconds: 5),
+                                content: const Center(
+                                  child: Text(
+                                    "Sorry, something went wrong. Make sure to fill all the fields, verify the numbers, and eventually Check your network",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                        } else {
+                          Navigator.of(context).pop();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              behavior: SnackBarBehavior.floating,
+                              margin: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height *
+                                      0.80),
+                              backgroundColor: Colors.red.withOpacity(0.9),
+                              duration: const Duration(seconds: 5),
+                              content: const Center(
+                                child: Text(
+                                  "Sorry, something went wrong. Number does not exists",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                      },
                       child: const Text(
                         "Confirm deposit",
                         style: TextStyle(
@@ -167,8 +287,8 @@ class _OperationState extends State<Operation> {
           return Transform(
             transform: Matrix4.translationValues(0.0, curvedValue * 200, 0.0),
             child: AlertDialog(
-              shape:
-                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0)),
               title: Row(
                 children: [
                   const Text(
@@ -243,7 +363,109 @@ class _OperationState extends State<Operation> {
                         ),
                         backgroundColor: PRIMARY_COLOR,
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        debugPrint(user.client.phoneNber);
+                        if (user.balance >
+                                double.parse(withdrawalAmountController.text) &&
+                            user.pin == withdrawalPasswordController.text) {
+                          var response = await http.post(
+                              Uri.parse(
+                                "http://192.168.12.169:8080/Transaction/trans?num1=${user.client.phoneNber}&balance=${-double.parse(withdrawalAmountController.text)}&num2=${user.client.phoneNber}&Description&type=${true}",
+                              ),
+                              headers: {
+                                "Accept": "application/json",
+                                "content-type": "application/json"
+                              });
+                          var body = json.decode(response.body);
+                          debugPrint(body.toString());
+                          if (body.toString() == "false") {
+                            Navigator.of(context).pop();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                margin: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.height *
+                                        0.94),
+                                backgroundColor: Colors.red.withOpacity(0.9),
+                                duration: const Duration(seconds: 3),
+                                content: const Center(
+                                  child: Text(
+                                    "Unable to complete, Sorry.",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else if (body.toString() == "true" &&
+                              withdrawalPasswordController.text == user.pin) {
+                            Navigator.of(context).pop();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                margin: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.height *
+                                        0.85),
+                                backgroundColor: Colors.green.withOpacity(0.9),
+                                duration: const Duration(seconds: 3),
+                                content: Center(
+                                  child: Text(
+                                    "Withdrawal of ${withdrawalAmountController.text} completed successfully.",
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else {
+                            Navigator.of(context).pop();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                margin: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.height *
+                                        0.84),
+                                backgroundColor: Colors.yellow.withOpacity(0.9),
+                                duration: const Duration(seconds: 3),
+                                content: const Center(
+                                  child: Text(
+                                    "Sorry, something went wrong. Check your network",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                        } else {
+                          Navigator.of(context).pop();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              behavior: SnackBarBehavior.floating,
+                              margin: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height *
+                                      0.84),
+                              backgroundColor: Colors.red.withOpacity(0.9),
+                              duration: const Duration(seconds: 3),
+                              content: const Center(
+                                child: Text(
+                                  "Sorry, passwords do not match, insufficient funds, or empty fields provided",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                      },
                       child: const Text(
                         "Confirm Withdraw",
                         style: TextStyle(
@@ -304,7 +526,7 @@ class _OperationState extends State<Operation> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        Container(
+                        SizedBox(
                           height: 80,
                           width: 280,
                           child: TransactionButton(
@@ -336,7 +558,10 @@ class _OperationState extends State<Operation> {
           ],
         ),
       ),
-      bottomNavigationBar: const BottomNavBar(select: 0),
+      bottomNavigationBar: BottomNavBar(
+        select: 0,
+        user: user,
+      ),
     );
   }
 }
