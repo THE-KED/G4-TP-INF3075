@@ -78,7 +78,7 @@ public class TransactionRepoImplTest {
 
         Assertions.assertFalse ( repoImpl.delete(-1) );
         
-        Assertions.assertTrue( repoImpl.delete(1) );
+        Assertions.assertTrue( repoImpl.delete(2) );
 
         List<Integer> list = null;
 

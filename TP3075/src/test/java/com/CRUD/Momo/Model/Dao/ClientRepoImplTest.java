@@ -24,7 +24,7 @@ public class ClientRepoImplTest {
     void findByIdTest () {
 
         
-        //Assertions.assertNotNull( repoImpl.findById(7) );
+        Assertions.assertNotNull( repoImpl.findById(7) );
         Assertions.assertThrows( NoSuchElementException.class , ()-> {repoImpl.findById(10000000).get();} );
 
     }
@@ -70,7 +70,7 @@ public class ClientRepoImplTest {
     @Test
     @Disabled
     void deleteTest () {
-        Assertions.assertTrue( repoImpl.delete(3) );
+        Assertions.assertTrue( repoImpl.delete(1) );
 
         /*Assertions.assertThrows( EmptyResultDataAccessException.class , () ->  { repoImpl.delete(-1); } );
 

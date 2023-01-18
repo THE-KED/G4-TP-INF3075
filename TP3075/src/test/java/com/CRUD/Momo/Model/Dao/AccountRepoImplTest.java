@@ -39,7 +39,7 @@ public class AccountRepoImplTest {
     @Test
     void findByIdTest () {
 
-        Assertions.assertNotNull( repo.findById(8));
+        Assertions.assertNotNull( repo.findById(9));
 
         Assertions.assertNull( repo.findById(100000) );
 
